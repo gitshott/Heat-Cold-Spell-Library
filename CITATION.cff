@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the confirmed release metadata after replacing the placeholders."
+title: "Heat / Cold Spell Prediction and Analysis"
+type: software
+abstract: "Python workflows for daily temperature preparation, heat/cold spell analysis, model comparison, and future MAX/MIN forecasting."
+version: "0.1.0"
+# Placeholder date; replace after a release date is confirmed.
+date-released: "2000-01-01"
+repository-code: "https://github.com/REPLACE-ME/REPLACE-ME"
+url: "https://pypi.org/project/REPLACE-ME-DISTRIBUTION-NAME/"
+license: MIT
+authors:
+  - family-names: "[CONFIRM FAMILY NAME]"
+    given-names: "[CONFIRM GIVEN NAME]"
+    affiliation: "[CONFIRM AFFILIATION OR REMOVE THIS FIELD]"
+keywords:
+  - temperature
+  - heat wave
+  - cold wave
+  - forecasting
+  - meteorology
+  - Python
+

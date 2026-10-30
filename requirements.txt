@@ -1,0 +1,13 @@
+# Direct runtime dependencies observed in the source tree.
+numpy
+pandas
+scipy
+matplotlib
+scikit-learn
+openpyxl
+joblib
+
+# Optional: install a TensorFlow build compatible with the target Python and
+# platform when using DNN, LSTM, or GRU candidates. The repository does not
+# currently pin a supported TensorFlow version.
+

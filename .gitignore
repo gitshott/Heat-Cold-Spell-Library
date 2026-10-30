@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Testing and tooling
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Build files
+build/
+dist/
+*.egg-info/
+
+# Generated data and outputs
+data/
+outputs/
+saved_models/
+
+# Archives and private documents
+library.zip
+file/explanation.rtf
+COPYRIGHT_REPORT.md
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment and secrets
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs and coverage
+*.log
+.coverage
+htmlcov/
+
+# Notebook and editor files
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Generated model files
+*.joblib
+*.keras
+*.h5
+*.pkl
