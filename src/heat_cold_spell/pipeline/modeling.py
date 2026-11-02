@@ -19,8 +19,11 @@ from sklearn.metrics import (
 )
 from sklearn.preprocessing import StandardScaler
 
-from pipeline.historical import SEASON_BY_MONTH, calendar_day_365, qualifying_runs
-
+from heat_cold_spell.pipeline.historical import (
+    SEASON_BY_MONTH,
+    calendar_day_365,
+    qualifying_runs,
+)
 
 MODEL_DESCRIPTIONS = {
     "Seasonal baseline": "Historical mean for the same calendar day",

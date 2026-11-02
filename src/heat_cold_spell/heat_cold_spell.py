@@ -66,8 +66,8 @@ def prepare_data(
         report_destination = Path(report_path).expanduser()
     report_destination.parent.mkdir(parents=True, exist_ok=True)
 
-    from config import REQUIRED_COLUMNS
-    from pipeline.data import load_and_validate_daily_data
+    from heat_cold_spell.config import REQUIRED_COLUMNS
+    from heat_cold_spell.pipeline.data import load_and_validate_daily_data
 
     data, report = load_and_validate_daily_data(source, REQUIRED_COLUMNS)
     data.to_csv(destination, index=False, date_format="%Y-%m-%d")
@@ -244,7 +244,11 @@ def _apply_historical_reference(
     location: str,
 ) -> pd.DataFrame:
     """Apply latest available 15 observed years of calendar-day normals."""
-    from pastspells import HEAT_MIN_TMAX_C
+    spell_workflow = _load_workflow_script(
+        "06_pastspells.py",
+        "spell_rules",
+    )
+    HEAT_MIN_TMAX_C = spell_workflow.HEAT_MIN_TMAX_C
 
     location = location.strip().lower()
     if location not in HEAT_MIN_TMAX_C:
@@ -317,7 +321,7 @@ def predict_spells(
         raise ValueError("Pass historical_path so forecast spells use observed-data normals")
 
     target = _read_daily_extremes(source)
-    workflow = _load_workflow_script("pastspells.py", "spell_rules")
+    workflow = _load_workflow_script("06_pastspells.py", "spell_rules")
     if historical_path is None:
         daily = workflow.classify_daily_data(target, location)
     else:

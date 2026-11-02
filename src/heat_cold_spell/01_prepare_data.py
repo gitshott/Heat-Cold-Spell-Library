@@ -5,14 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from config import (
+from heat_cold_spell.config import (
     PROCESSED_DATA_PATH,
     RAW_DATA_PATH,
     REQUIRED_COLUMNS,
     VALIDATION_REPORT_PATH,
     create_directories,
 )
-from pipeline.data import load_and_validate_daily_data
+from heat_cold_spell.pipeline.data import load_and_validate_daily_data
 
 
 def main() -> None:

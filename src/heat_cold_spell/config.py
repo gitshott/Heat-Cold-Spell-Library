@@ -2,20 +2,19 @@
 
 from pathlib import Path
 
-# Project root directory (the directory containing config.py)
-BASE_DIR = Path(__file__).resolve().parent
+# Project root directory: D:/codingenv/library
+BASE_DIR = Path(__file__).resolve().parents[2]
 
-# Default input CSV path, used if the user leaves the prompt blank
+# Default input CSV path
 RAW_DATA_PATH = BASE_DIR / "data" / "raw" / "42180_Table.csv"
 
-# All generated output will be saved under D:\codingenv\library
-OUTPUT_DIR = Path(r"D:\codingenv\library")
+# Generated output directory
+OUTPUT_DIR = BASE_DIR
 
 # Output directories
 DATA_DIR = OUTPUT_DIR / "data"
 PROCESSED_DIR = DATA_DIR / "processed"
 REPORTS_DIR = OUTPUT_DIR / "outputs" / "reports"
-
 # Output files
 PROCESSED_DATA_PATH = PROCESSED_DIR / "processed_daily_data.csv"
 VALIDATION_REPORT_PATH = REPORTS_DIR / "validation_report.json"

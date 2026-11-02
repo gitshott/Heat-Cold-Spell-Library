@@ -1,6 +1,6 @@
 # Detailed usage guide
 
-This guide expands the examples in the root [README](../README.md). It documents the current source tree and uses the public functions exported by `heat_cold_spell.py`.
+This guide expands the examples in the root [README](../README.md). It documents the current source tree and uses the public functions exported by the `heat_cold_spell` package.
 
 ## 1. Prepare a raw dataset
 
@@ -143,14 +143,28 @@ The precise model artifact files depend on the selected model. Do not treat gene
 
 ## 8. Direct script usage
 
-The public facade is recommended for Python callers. The numbered scripts remain available for the existing workflow:
+The public facade is recommended for Python callers. From the repository root, first make the `src` directory importable.
 
-```bash
-python 03_train_and_compare.py --help
-python 04_train_best_model.py --help
-python 05_predict_future.py --help
-python pastspells.py --help
+### PowerShell
+
+```powershell
+$env:PYTHONPATH = "src"
 ```
 
-`01_prepare_data.py` and `02_historical_analysis.py` prompt interactively for their input path and, for historical analysis, location. They write to the absolute output paths defined in `config.py` or `02_historical_analysis.py`; review those constants before using them outside the original environment.
+### Linux/macOS
+
+```bash
+export PYTHONPATH=src
+```
+
+The numbered modules remain available for the existing workflow:
+
+```bash
+python -m heat_cold_spell.03_train_and_compare --help
+python -m heat_cold_spell.04_train_best_model --help
+python -m heat_cold_spell.05_predict_future --help
+python -m heat_cold_spell.06_pastspells --help
+```
+
+`01_prepare_data.py` and `02_historical_analysis.py` prompt interactively for their input path and, for historical analysis, location. They use the paths defined in `src/heat_cold_spell/config.py` and `src/heat_cold_spell/02_historical_analysis.py`; review those constants before using them outside the original environment.
 

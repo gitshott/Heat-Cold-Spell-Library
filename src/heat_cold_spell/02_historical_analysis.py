@@ -13,7 +13,10 @@ import pandas as pd
 # CONFIGURATION
 # ============================================================
 
-OUTPUT_DIR = Path(r"D:\codingenv\library\outputs\historical_analysis")
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parents[2]
+
+OUTPUT_DIR = PROJECT_ROOT / "outputs" / "historical_analysis"
 
 MINIMUM_SPELL_DAYS = 5
 EXTREME_HEAT_TMAX_C = 45.0

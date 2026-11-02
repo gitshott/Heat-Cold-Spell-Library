@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from pipeline.historical import calendar_day_365
-from pipeline.modeling import (
+from heat_cold_spell.pipeline.historical import calendar_day_365
+from heat_cold_spell.pipeline.modeling import (
     _annual_design,
     _recursive_sequence_prediction,
     _recursive_tabular_prediction,
@@ -24,9 +24,13 @@ from pipeline.modeling import (
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_INPUT = SCRIPT_DIR / "data" / "processed" / "processed_daily_data.csv"
-DEFAULT_MODEL_DIR = SCRIPT_DIR / "saved_models"
-DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "outputs" / "future_predictions"
+PROJECT_ROOT = SCRIPT_DIR.parents[2]
+
+DEFAULT_INPUT = (
+    PROJECT_ROOT / "data" / "processed" / "processed_daily_data.csv"
+)
+DEFAULT_MODEL_DIR = PROJECT_ROOT / "saved_models"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "future_predictions"
 DEFAULT_FORECAST_DAYS = 1825
 TARGETS = ("MAX", "MIN")
 

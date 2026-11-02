@@ -112,24 +112,31 @@ $$\text{Rank Criteria: } \text{RMSE} \longrightarrow \text{MAE} \longrightarrow 
 ### Directory Structure Requirements
 ```text
 .
-├── heat_cold_spell.py         # Primary high-level API wrapper
-├── pastspells.py              # Historical spell detection logic
-├── 01_prepare_data.py         # CLI Stage 1: Data preparation
-├── 02_historical_analysis.py  # CLI Stage 2: Historical analysis
-├── 03_train_and_compare.py    # CLI Stage 3: Model comparison
-├── 04_train_best_model.py     # CLI Stage 4: Model refitting
-├── 05_predict_future.py       # CLI Stage 5: Future prediction
-└── pipeline/                  # Internal processing modules
-    ├── data.py
-    ├── historical.py
-    └── modeling.py
+├── src/
+│   └── heat_cold_spell/
+│       ├── __init__.py
+│       ├── heat_cold_spell.py        # Primary high-level API wrapper
+│       ├── config.py
+│       ├── 01_prepare_data.py        # CLI Stage 1: Data preparation
+│       ├── 02_historical_analysis.py # CLI Stage 2: Historical analysis
+│       ├── 03_train_and_compare.py   # CLI Stage 3: Model comparison
+│       ├── 04_train_best_model.py    # CLI Stage 4: Model refitting
+│       ├── 05_predict_future.py      # CLI Stage 5: Future prediction
+│       ├── 06_pastspells.py          # CLI Stage 6: Spell detection
+│       └── pipeline/                 # Internal processing modules
+│           ├── __init__.py
+│           ├── data.py
+│           ├── historical.py
+│           └── modeling.py
 ```
+
+The examples below assume that the `src` directory is available on `PYTHONPATH`.
 
 ---
 
 ## Python API Usage
 
-The library provides a high-level Functional API via `heat_cold_spell.py`:
+The library provides a high-level Functional API via the `heat_cold_spell` package:
 
 ```python
 import heat_cold_spell as hcs
@@ -181,23 +188,50 @@ forecast_spells = hcs.predict_spells(
 
 ## Command-Line Interface (CLI)
 
-Each pipeline stage can also be executed directly as a standalone CLI script:
+Each pipeline stage can also be executed as a module from the repository root.
+First make the `src` directory importable.
+
+### PowerShell
+
+```powershell
+$env:PYTHONPATH = "src"
+```
+
+### Linux/macOS
+
+```bash
+export PYTHONPATH=src
+```
+
+Then run the pipeline stages:
 
 ```bash
 # Stage 1: Validate and prepare daily CSV/Excel data
-python 01_prepare_data.py
+python -m heat_cold_spell.01_prepare_data
 
 # Stage 2: Analyze historical trends, heatmaps, and spell events
-python 02_historical_analysis.py
+python -m heat_cold_spell.02_historical_analysis
 
 # Stage 3: Train and evaluate candidate forecasters
-python 03_train_and_compare.py --input data/processed/processed_daily_data.csv --output-dir outputs/comparison
+python -m heat_cold_spell.03_train_and_compare \
+  --input data/processed/processed_daily_data.csv \
+  --output-dir outputs/comparison
 
 # Stage 4: Refit the top-ranked models on the full dataset
-python 04_train_best_model.py --input data/processed/processed_daily_data.csv --comparison-dir outputs/comparison --model-dir saved_models
+python -m heat_cold_spell.04_train_best_model \
+  --input data/processed/processed_daily_data.csv \
+  --comparison-dir outputs/comparison \
+  --model-dir saved_models
 
 # Stage 5: Generate multi-year future predictions
-python 05_predict_future.py --input data/processed/processed_daily_data.csv --model-dir saved_models --output-dir outputs/forecasts --forecast-days 1825
+python -m heat_cold_spell.05_predict_future \
+  --input data/processed/processed_daily_data.csv \
+  --model-dir saved_models \
+  --output-dir outputs/forecasts \
+  --forecast-days 1825
+
+# Stage 6: Detect heat and cold spells
+python -m heat_cold_spell.06_pastspells
 ```
 
 ---
@@ -211,4 +245,5 @@ python 05_predict_future.py --input data/processed/processed_daily_data.csv --mo
 | `03_train_and_compare.py` | `{max,min}_model_comparison.xlsx`, `{max,min}_model_predictions.xlsx` |
 | `04_train_best_model.py` | `{max,min}/model_manifest.json`, serialized model weights (`model.keras` or `model.joblib`), `model_selection_explanation.md` |
 | `05_predict_future.py` | `future_max_min_predictions.csv`, `future_monthly_summary.csv`, `future_annual_summary.csv`, `forecast_verification.json`, `future_max_min_forecast.png` |
+| `06_pastspells.py` | Daily spell classification and spell-event output files |
 | `predict_spells` | `daily_spell_classification.csv`, `spell_events.csv` |

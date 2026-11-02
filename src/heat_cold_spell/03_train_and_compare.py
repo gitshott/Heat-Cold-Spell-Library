@@ -17,12 +17,15 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from pipeline.modeling import fit_and_predict
-
+from heat_cold_spell.pipeline.modeling import fit_and_predict
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_INPUT_FILE = SCRIPT_DIR / "data" / "processed" / "processed_daily_data.csv"
-DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "outputs" / "model_comparison"
+PROJECT_ROOT = SCRIPT_DIR.parents[2]
+
+DEFAULT_INPUT_FILE = (
+    PROJECT_ROOT / "data" / "processed" / "processed_daily_data.csv"
+)
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "model_comparison"
 
 REQUIRED_COLUMNS = ["INDEX", "YEAR", "MN", "DT", "MAX", "MIN"]
 FEATURE_COLUMNS = ["YEAR", "MONTH", "DAY"]

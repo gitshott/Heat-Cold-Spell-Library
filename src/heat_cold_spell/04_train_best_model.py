@@ -16,8 +16,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 
-from pipeline.historical import calendar_day_365
-from pipeline.modeling import (
+from heat_cold_spell.pipeline.historical import calendar_day_365
+from heat_cold_spell.pipeline.modeling import (
     MODEL_DESCRIPTIONS,
     _annual_design,
     _sequence_features,
@@ -26,9 +26,12 @@ from pipeline.modeling import (
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DEFAULT_INPUT = SCRIPT_DIR / "data" / "processed" / "processed_daily_data.csv"
-DEFAULT_COMPARISON_DIR = SCRIPT_DIR / "outputs" / "model_comparison"
-DEFAULT_MODEL_DIR = SCRIPT_DIR / "saved_models"
+PROJECT_ROOT = SCRIPT_DIR.parents[2]
+DEFAULT_INPUT = (
+    PROJECT_ROOT / "data" / "processed" / "processed_daily_data.csv"
+)
+DEFAULT_COMPARISON_DIR = PROJECT_ROOT / "outputs" / "model_comparison"
+DEFAULT_MODEL_DIR = PROJECT_ROOT / "saved_models"
 TARGETS = ("MAX", "MIN")
 RANDOM_SEED = 42
 LOOKBACK_DAYS = 60
@@ -222,7 +225,7 @@ def fit_refit_model(
             details["origin"] = origin.strftime("%Y-%m-%d")
 
         else:
-            from pipeline.modeling import _sequence_training_data
+            from heat_cold_spell.pipeline.modeling import _sequence_training_data
 
             sequences, target_values, scaler, origin = _sequence_training_data(
                 train_frame, LOOKBACK_DAYS
