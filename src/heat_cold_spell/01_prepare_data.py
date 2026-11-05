@@ -2,26 +2,29 @@
 
 from __future__ import annotations
 
+'''json is used to save the validation report.
+Path is used to work safely with file and folder paths.'''
 import json
 from pathlib import Path
 
 from heat_cold_spell.config import (
     PROCESSED_DATA_PATH,
-    RAW_DATA_PATH,
     REQUIRED_COLUMNS,
     VALIDATION_REPORT_PATH,
     create_directories,
 )
+'''Imports the function that reads the input file, checks its structure, validates the data, and returns cleaned data plus a report.'''
 from heat_cold_spell.pipeline.data import load_and_validate_daily_data
 
-
 def main() -> None:
-    default_path = str(RAW_DATA_PATH)
     entered_path = input(
-        f"Enter the input CSV file path [{default_path}]: "
+        "Enter the input CSV file path: "
     ).strip().strip('"')
 
-    input_path = Path(entered_path).expanduser() if entered_path else RAW_DATA_PATH
+    if not entered_path:
+        raise ValueError("An input CSV file path is required.")
+
+    input_path = Path(entered_path).expanduser()
 
     if not input_path.is_file():
         raise FileNotFoundError(f"Input CSV file not found: {input_path}")

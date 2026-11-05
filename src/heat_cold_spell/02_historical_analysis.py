@@ -8,11 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-
 # ============================================================
 # CONFIGURATION
 # ============================================================
-
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parents[2]
 
