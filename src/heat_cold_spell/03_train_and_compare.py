@@ -19,14 +19,6 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 from heat_cold_spell.pipeline.modeling import fit_and_predict
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parents[2]
-
-DEFAULT_INPUT_FILE = (
-    PROJECT_ROOT / "data" / "processed" / "processed_daily_data.csv"
-)
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "model_comparison"
-
 REQUIRED_COLUMNS = ["INDEX", "YEAR", "MN", "DT", "MAX", "MIN"]
 FEATURE_COLUMNS = ["YEAR", "MONTH", "DAY"]
 TARGET_COLUMNS = ["MAX", "MIN"]
@@ -56,13 +48,13 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--input",
         type=Path,
-        default=DEFAULT_INPUT_FILE,
+        required=True,
         help="Input CSV containing INDEX, YEAR, MN, DT, MAX, and MIN.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=DEFAULT_OUTPUT_DIR,
+        required=True,
         help="Folder for model comparison and prediction workbooks.",
     )
     return parser.parse_args()

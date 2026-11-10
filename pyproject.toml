@@ -8,6 +8,8 @@ version = "0.1.0"
 description = "Heat and cold spell analysis and forecasting library"
 readme = "README.md"
 requires-python = ">=3.9"
+license = "MIT"
+
 dependencies = [
     "numpy",
     "pandas",

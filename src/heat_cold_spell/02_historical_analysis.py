@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -11,10 +12,7 @@ import pandas as pd
 # ============================================================
 # CONFIGURATION
 # ============================================================
-SCRIPT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = SCRIPT_DIR.parents[2]
-
-OUTPUT_DIR = PROJECT_ROOT / "outputs" / "historical_analysis"
+OUTPUT_DIR: Path | None = None
 
 MINIMUM_SPELL_DAYS = 5
 EXTREME_HEAT_TMAX_C = 45.0
@@ -28,6 +26,33 @@ HEAT_MIN_TMAX_C = {
     "coastal": 37.0,
     "hilly": 30.0,
 }
+
+
+def _require_output_dir() -> Path:
+    if OUTPUT_DIR is None:
+        raise RuntimeError(
+            "An output directory must be supplied before generating files."
+        )
+    return OUTPUT_DIR
+
+
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Analyze historical heat and cold spells."
+    )
+    parser.add_argument(
+        "--input",
+        type=Path,
+        required=True,
+        help="Historical CSV or Excel input file.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="Directory for generated analysis files.",
+    )
+    return parser.parse_args()
 
 def load_data(path: Path) -> pd.DataFrame:
     """Load CSV or Excel data, validate columns, and combine duplicate dates."""
@@ -439,6 +464,7 @@ def save_heatmap(
 
 def create_monthly_charts(daily: pd.DataFrame) -> None:
     """Create monthly MAX, heat-day, and cold-day heatmaps."""
+    output_dir = _require_output_dir()
     monthly = (
         daily.assign(
             HEAT_WAVE_DAY=daily["HEAT_CLASSIFICATION"].eq("Heat Wave Day"),
@@ -457,7 +483,7 @@ def create_monthly_charts(daily: pd.DataFrame) -> None:
         "MONTHLY_MEAN_MAX",
         "Monthly Mean Daily Maximum Temperature",
         "Mean MAX temperature (°C)",
-        OUTPUT_DIR / "monthly_mean_max_heatmap.png",
+        output_dir / "monthly_mean_max_heatmap.png",
         "YlOrRd",
         ".1f",
     )
@@ -466,7 +492,7 @@ def create_monthly_charts(daily: pd.DataFrame) -> None:
         "HEAT_WAVE_DAYS",
         "Monthly Heat-Wave Days",
         "Heat-wave days",
-        OUTPUT_DIR / "monthly_heat_wave_days_heatmap.png",
+        output_dir / "monthly_heat_wave_days_heatmap.png",
         "YlOrRd",
         ".0f",
     )
@@ -475,7 +501,7 @@ def create_monthly_charts(daily: pd.DataFrame) -> None:
         "COLD_WAVE_DAYS",
         "Monthly Cold-Wave Days",
         "Cold-wave days",
-        OUTPUT_DIR / "monthly_cold_wave_days_heatmap.png",
+        output_dir / "monthly_cold_wave_days_heatmap.png",
         "Blues",
         ".0f",
     )
@@ -484,7 +510,8 @@ def create_monthly_charts(daily: pd.DataFrame) -> None:
 
 def create_yearly_spell_chart(annual: pd.DataFrame) -> Path:
     """Save a grouped bar chart of heat- and cold-spell counts by year."""
-    chart_path = OUTPUT_DIR / "yearly_spell_occurrences.png"
+    output_dir = _require_output_dir()
+    chart_path = output_dir / "yearly_spell_occurrences.png"
     fig_width = max(10, min(20, len(annual) * 0.45))
     fig, ax = plt.subplots(figsize=(fig_width, 6))
 
@@ -519,12 +546,8 @@ def create_yearly_spell_chart(annual: pd.DataFrame) -> Path:
 
 
 def main() -> None:
-    entered_path = input(
-        "Enter input CSV/Excel file path: "
-    ).strip().strip('"').strip("'")
-
-    if not entered_path:
-        raise ValueError("An input file path is required.")
+    global OUTPUT_DIR
+    args = parse_arguments()
 
     location = input(
         "Station location (plains, coastal, or hilly): "
@@ -536,7 +559,8 @@ def main() -> None:
             + ", ".join(HEAT_MIN_TMAX_C)
         )
 
-    source = Path(entered_path).expanduser()
+    source = args.input.expanduser()
+    OUTPUT_DIR = args.output_dir.expanduser()
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     raw = load_data(source)
